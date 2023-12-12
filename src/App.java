@@ -17,7 +17,7 @@ public class App {
         insertarAlbumes(document);
         
         // Guardar el documento en un archivo
-        saveXMLDocument(document, "titulos.xml");
+        saveXMLDocument(document, "bin/titulos.xml");
 
 
         System.out.println("Documento XML creado y guardado correctamente.");
@@ -34,11 +34,25 @@ public class App {
     }
 
     private static void saveXMLDocument(Document document, String filePath) {
-        try (FileWriter writer = new FileWriter(filePath)) {
+        FileWriter writer = null;
+    
+        try {
+            writer = new FileWriter(filePath);
             // Escribir el documento XML en un archivo
             document.write(writer);
+            // Forzar la escritura de datos al archivo
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                // Cerrar el recurso FileWriter en el bloque finally
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
